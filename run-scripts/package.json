@@ -1,6 +1,6 @@
 {
   "name": "custom-react-script",
-  "version": "1.0.14",
+  "version": "1.0.15",
   "description": "Test",
   "main": "index.js",
   "engines": {
@@ -70,7 +70,8 @@
     "webpack-dev-server": "^3.1.0",
     "workbox-webpack-plugin": "^3.0.1",
     "webpack-hot-middleware": "2.21.2",
-    "progress-bar-webpack-plugin": "^1.11.0"
+    "progress-bar-webpack-plugin": "^1.11.0",
+    "babel-plugin-transform-imports": "^1.5.0"
   },
   "devDependencies": {
     "history": "^4.7.2",

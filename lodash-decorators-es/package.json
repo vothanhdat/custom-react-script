@@ -1,0 +1,22 @@
+{
+  "name": "lodash-decorators-es",
+  "description": "Read file contents at build time, similar to webpack raw-loader",
+  "version": "0.0.2",
+  "main": "index.js",
+  "license": "MIT",
+  "files": [],
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vothanhdat/custom-react-script"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+  },
+  "peerDependencies": {
+    "lodash-decorators": "^4.5.0"
+  },
+  "sideEffects": false
+}

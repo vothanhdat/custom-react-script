@@ -26,10 +26,27 @@ const prerenderPaths = ['/', '/termsofuse/', '/privacypolicy/', '/blog/']
 module.exports = () => require('./webpack.config')({
     dev: false,
     babel_plugins: [
-        "lodash",
         "@babel/plugin-proposal-object-rest-spread",
         "@babel/plugin-transform-runtime",
         "@babel/plugin-transform-arrow-functions",
+        ["transform-imports", {
+            "material-ui/styles": {
+                "transform": "material-ui/styles/${member}",
+                "preventFullImport": true
+            },
+            "material-ui": {
+                "transform": "material-ui/${member}",
+                "preventFullImport": true
+            },
+            "lodash": {
+                "transform": "lodash/${member}",
+                "preventFullImport": true
+            },
+            "lodash-decorators": {
+                "transform": "lodash-decorators/${member}",
+                "preventFullImport": true
+            },
+        }]
     ],
     plugins: [
         new UglifyJsPlugin({
