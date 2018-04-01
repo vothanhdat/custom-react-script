@@ -30,12 +30,15 @@ switch (script) {
     compiler.run(function (err, stats) {
       if (err)
         console.err(err)
-      else
+      else{
         console.log(stats.toString({
           chunks: false, // Makes the build much quieter
           colors: true,
           children: false,
-        }))
+        }));
+
+        require('../configs/workbox');
+      }
     });
 
     break;
