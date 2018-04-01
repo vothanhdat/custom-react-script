@@ -2,7 +2,7 @@ const webpack = require('webpack');
 const fs = require('fs');
 const path = require('path');
 const middleware = require('webpack-dev-middleware');
-const webpackConfig = require('../webpack.config.dev')();
+const webpackConfig = require('../configs/webpack.config.dev')();
 
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);

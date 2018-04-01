@@ -1,8 +1,8 @@
 {
-  "name": "run-scripts",
+  "name": "custom-react-script",
   "version": "1.0.0",
   "description": "Test",
-  "main": "./bin/run-scripts.js",
+  "main": "index.js",
   "engines": {
     "node": ">=6"
   },
@@ -13,10 +13,20 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "files": [
-    "bin"
+    "bin",
+    "configs"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/vothanhdat/custom-react-script"
+  },
+  "bugs": {
+    "url": "https://github.com/vothanhdat/custom-react-script/issues"
+  },
+  "homepage": "https://github.com/vothanhdat/custom-react-script/",
   "author": "DatVo",
   "license": "ISC",
+  "keywords": [],
   "dependencies": {
     "@babel/core": "^7.0.0-beta.42",
     "@babel/plugin-proposal-object-rest-spread": "^7.0.0-beta.42",
