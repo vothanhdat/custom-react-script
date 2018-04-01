@@ -86,9 +86,6 @@ module.exports = ({
   },
   resolve: {
     extensions: ['*', '.js', '.jsx'],
-    alias: {
-      'lodash-decorators': 'node_modules/lodash-decorators',
-    }
   },
   output: {
     path: __dirname + '/build',
