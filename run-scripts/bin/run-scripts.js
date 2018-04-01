@@ -23,17 +23,21 @@ const script = scriptIndex === -1 ? args[0] : args[scriptIndex];
 const nodeArgs = scriptIndex > 0 ? args.slice(0, scriptIndex) : [];
 
 switch (script) {
-  case 'build':{
+  case 'build': {
     const webpackConfig = require('../configs/webpack.config.prod')();
     const compiler = webpack(webpackConfig);
 
-    compiler.run(function(err, stats) {
-        if(err)
-          console.err(err)
-        else
-          console.log(stats)
+    compiler.run(function (err, stats) {
+      if (err)
+        console.err(err)
+      else
+        console.log(stats.toString({
+          chunks: false, // Makes the build much quieter
+          colors: true,
+          children: false,
+        }))
     });
-    
+
     break;
   }
   case 'start':

@@ -7,6 +7,8 @@ const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
+const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+
 
 const path = require('path')
 const fs = require('fs')
@@ -72,7 +74,8 @@ module.exports = () => require('./webpack.config')({
             filename: '200.html',
             template: 'static/index.html',
             chunks: ['vendors~main','main']
-        })
+        }),
+        new ProgressBarPlugin(),
     ],
     cssExtra: ([cssloader, ...rest]) => ExtractTextPlugin.extract({
         use: [
