@@ -9,6 +9,11 @@ const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 
 const path = require('path')
+const fs = require('fs')
+
+
+const appDirectory = fs.realpathSync(process.cwd());
+const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
 
 const prerenderPaths = ['/', '/termsofuse/', '/privacypolicy/', '/blog/']
@@ -16,7 +21,7 @@ const prerenderPaths = ['/', '/termsofuse/', '/privacypolicy/', '/blog/']
 // const WorkboxPlugin = require('workbox-webpack-plugin');
 
 
-module.exports = require('./webpack.config')({
+module.exports = () => require('./webpack.config')({
     dev: false,
     babel_plugins: [
         "lodash",
@@ -37,11 +42,11 @@ module.exports = require('./webpack.config')({
         ]),
 
         new ExtractTextPlugin({
-            filename: "style.[contenthash].css",
+            filename: "style.[name].[hash].css",
             allChunks: true,
         }),
         new PrerenderSPAPlugin({
-            staticDir: path.join(__dirname, 'build'),
+            staticDir: resolveApp('./build'),
             routes: [
                 ...prerenderPaths,
                 ...prerenderPaths.map(e => '/kr' + e),
@@ -81,9 +86,9 @@ module.exports = require('./webpack.config')({
             { 
                 loader: 'postcss-loader',
                 options: {
-                    plugins: [
-                        require('autoprefixer')({ browsers: ['last 1 versions'] })
-                    ]
+                   config :{
+                        path: __dirname + '/postcss.config.js'
+                   }
                 }
             },
             ...rest,

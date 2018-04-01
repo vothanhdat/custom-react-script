@@ -88,7 +88,7 @@ module.exports = ({
     extensions: ['*', '.js', '.jsx'],
   },
   output: {
-    path: __dirname + '/build',
+    path: resolveApp('./build'),
     publicPath: '/',
     filename: '[name].[chunkhash].js',
   },
