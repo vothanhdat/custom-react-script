@@ -1,11 +1,33 @@
 {
-  "name": "custom-react",
-  "version": "1.0.0",
-  "description": "",
+  "name": "withsass.macro",
+  "description": "Read file contents at build time, similar to webpack raw-loader",
+  "version": "0.0.1",
   "main": "index.js",
+  "license": "MIT",
+  "files": [
+    "withSASS.es6"
+  ],
+  "keywords": [
+    "webpack",
+    "scss",
+    "sass",
+    "string",
+    "babel",
+    "babel-macros",
+    "babel-plugin-macros"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/vothanhdat/withsass.macro.git"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
-  "license": "ISC"
+  "dependencies": {
+    "babel-plugin-macros": "^2.1.0",
+    "recompose": "^0.26.0"
+  },
+  "peerDependencies": {
+    "react": "0.14 || 15 || 16 || 17"
+  }
 }

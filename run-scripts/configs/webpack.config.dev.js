@@ -37,7 +37,7 @@ module.exports = (env,
     },
     entry: [
       './src/index.js',
-      path.resolve(__dirname,'node_modules','webpack-hot-middleware/client'),
+      'webpack-hot-middleware/client',
     ],
     output: {
       path: '/build',

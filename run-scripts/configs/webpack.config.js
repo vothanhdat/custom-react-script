@@ -24,8 +24,8 @@ module.exports = ({
   module: {
     rules: [
       {
-        test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
+        test: /\.(js|jsx|es6)$/,
+        exclude: /node_modules.*\.(js|jsx)$/,
         use: [
           {
             loader: 'babel-loader',
@@ -87,7 +87,7 @@ module.exports = ({
   resolve: {
     extensions: ['*', '.js', '.jsx'],
     alias: {
-      'lodash-decorators': resolveApp('node_modules/lodash-decorators'),
+      'lodash-decorators': 'node_modules/lodash-decorators',
     }
   },
   output: {
