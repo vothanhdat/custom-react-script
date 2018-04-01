@@ -78,7 +78,14 @@ module.exports = require('./webpack.config')({
                     importLoaders : 2,
                 }
             },
-            { loader: 'postcss-loader' },
+            { 
+                loader: 'postcss-loader',
+                options: {
+                    plugins: [
+                        require('autoprefixer')({ browsers: ['last 1 versions'] })
+                    ]
+                }
+            },
             ...rest,
         ],
         fallback: 'style-loader',
