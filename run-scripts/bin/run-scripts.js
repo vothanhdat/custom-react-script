@@ -37,7 +37,7 @@ switch (script) {
           children: false,
         }));
 
-        require('../configs/workbox');
+        // require('../configs/workbox');
       }
     });
 

@@ -54,7 +54,7 @@ module.exports = () => require('./webpack.config')({
         }),
         // new BundleAnalyzerPlugin(),
         new LodashModuleReplacementPlugin(),
-        new CleanWebpackPlugin(['build']),
+        new CleanWebpackPlugin([resolveApp('./build')]),
         new CopyWebpackPlugin([
             { from: 'static/', to: '' },
             { from: 'static/index.html', to: '200.html' },
