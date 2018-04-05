@@ -1,11 +1,10 @@
 {
-  "name": "lodash-decorators-es",
+  "name": "react-collections",
   "description": "Read file contents at build time, similar to webpack raw-loader",
-  "version": "0.0.2",
-  "main": "index.js",
+  "version": "0.0.1",
   "license": "MIT",
   "files": [
-    "index.es6"
+    "*"
   ],
   "keywords": [],
   "repository": {

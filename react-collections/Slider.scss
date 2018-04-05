@@ -1,0 +1,69 @@
+
+.banner {
+  width: 100%;
+  height: fit-content;
+  position: relative;
+}
+.container {
+  width: 100%;
+  overflow: hidden;
+}
+.slide {
+  display: flex;
+  transition: transform 0.5s;
+  user-select: none;
+  align-items: center;
+}
+.main {
+  flex: 1;
+  background-size: cover;
+  background-position: center;
+}
+.main img {
+  pointer-events: none;
+}
+.choose {
+  right:  20px;
+  bottom:  20px;
+  position:  absolute;
+  font-size:  0px;
+  margin-top: -5px;
+  div {
+    width: 10px;
+    float: left;
+    height: 10px;
+    margin: 0 10px;
+    cursor: pointer;
+    box-shadow: 0 0 5px #aaa;
+    transition: transform 0.5s;
+    border-radius: 5px;
+    background-color: #eee;
+  }
+  :global(.active) {
+    transform: scale(1.5);
+    background-color: #fff;
+  }
+}
+.navButton {
+  top: calc(50% - 25px);
+  color: #fff;
+  cursor: pointer;
+  position: absolute;
+  line-height: 0;
+  vertical-align: middle;
+  &:global(.navButton) span {
+    width: 39px;
+    border: solid #fff 0.07em;
+    height: 39px;
+    display: inline-block;
+    overflow: hidden;
+    font-size: 2.2em;
+    border-radius: 50%;
+  }
+  &:global(.navButton.left) {
+    left: 25px;
+  }
+  &:global(.navButton.right) {
+    right: 25px;
+  }
+}
