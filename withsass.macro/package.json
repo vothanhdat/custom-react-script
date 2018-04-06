@@ -1,7 +1,7 @@
 {
   "name": "withsass.macro",
   "description": "Read file contents at build time, similar to webpack raw-loader",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "main": "index.js",
   "license": "MIT",
   "files": [
@@ -28,6 +28,7 @@
     "recompose": "^0.26.0"
   },
   "peerDependencies": {
-    "react": "0.14 || 15 || 16 || 17"
+    "react": "0.14 || 15 || 16 || 17",
+    "custom-react-script": "~1.0.21"
   }
 }

@@ -39,6 +39,23 @@ module.exports.pitch = function (request) {
 
 // Hot Module Replacement,
 if(module.hot) {
+	var callbackArray = [];
+
+	if(content.locals) {
+
+		Object.defineProperties(content.locals, {
+			onUpdate:{
+				value : function(callback){
+					callbackArray.push(callback);
+					return function(){
+						callbackArray = callbackArray.filter(e => e != callback);
+					}
+				}
+			},
+		});
+
+	}
+
 	// When the styles change, update the <style> tags
 	module.hot.accept(${stringifyRequest}, function() {
 		var newContent = require(${stringifyRequest});
@@ -63,15 +80,16 @@ if(module.hot) {
 		}(content.locals, newContent.locals));
 
 
-		if(!locals) {
-			content.locals && (content.locals._uniqueID++);
-			content.locals && Object.assign(content.locals,newContent.locals)
+		if(!locals && content.locals) {
+			var clearOb = {};
+			for(var i in content.locals) clearOb[i] = undefined;
+			Object.assign(content.locals,clearOb,newContent.locals);
+			callbackArray.forEach(e => setTimeout(e,0));
 		}
 
 
 	});
 
-// When the module is disposed, remove the <style> tags
 	module.hot.dispose(function() { update(); });
 }
 
@@ -104,8 +122,6 @@ options.insertInto = ${insertInto};
 var update = require(${loaderUtils.stringifyRequest(this, "!style-loader/lib/addStyles.js" )})(content, options);
 
 if(content.locals) module.exports = content.locals;
-if(content.locals) content.locals._uniqueID = 0;
-
 
 ${options.hmr ? hmr : ""}
 

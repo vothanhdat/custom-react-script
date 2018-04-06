@@ -51,7 +51,7 @@ module.exports = ({
       },
       {
         test: /\.(scss|css)$/,
-        exclude: /node_modules/,
+        exclude: /node_modules.*\.(css)$/,
         use: cssExtra([
           {
             loader: "css-loader",
