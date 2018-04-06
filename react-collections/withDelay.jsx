@@ -1,6 +1,6 @@
 import React from "react"
 import wrapDisplayName from 'recompose/wrapDisplayName';
-import device from '../utils/device'
+import device from './utils/device'
 
 
 

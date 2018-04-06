@@ -1,7 +1,6 @@
 
-import React, { Component,Children,  } from 'react';
+import React, { Component, Children, } from 'react';
 import PropTypes from 'prop-types';
-import Button from 'material-ui/Button';
 import withSCSS from 'withsass.macro'
 
 
@@ -23,7 +22,7 @@ class Slider extends React.Component {
     circle: false,
   };
 
-  state = {num : 0}
+  state = { num: 0 }
 
   ref_banner = e => this.refs_banner = e
   ref_slide = e => this.refs_slide = e
@@ -92,7 +91,7 @@ class Slider extends React.Component {
           className={`${classes.navButton} navButton right`}
           onClick={this.cache(`next`, () => this.setState({ num: (this.state.num + 1) % this.getActualLengh() }))}
         ><i className="material-icons">navigate_next</i></div>
-        </div>
+      </div>
     )
   }
 
@@ -139,9 +138,9 @@ class Slider extends React.Component {
 
   onSlideMouseUp = (e) => {
 
-    if(e.touch && this.scrollLock == -1)
+    if (e.touch && this.scrollLock == -1)
       return;
-    
+
     e.touch && e.preventDefault();
 
     var { circle } = this.props
@@ -192,21 +191,21 @@ class Slider extends React.Component {
     var { length } = this.props.children
     var translateX = length > 0 ? (100 / this.getActualLengh()) : 100;
 
-    if(e.touch){
-    
-      if(this.scrollLock == -1){
+    if (e.touch) {
+
+      if (this.scrollLock == -1) {
         return;
-      }else if(this.scrollLock == 0){
+      } else if (this.scrollLock == 0) {
         this.totalX += e.clientX - this.mouseX;
         this.totalY += e.clientY - this.mouseY;
-        if(Math.abs(this.totalX) > 5 || Math.abs(this.totalY) > 5){
-          if(Math.abs(this.totalX) > Math.abs(this.totalY)){
+        if (Math.abs(this.totalX) > 5 || Math.abs(this.totalY) > 5) {
+          if (Math.abs(this.totalX) > Math.abs(this.totalY)) {
             this.scrollLock = 1;
-          }else{
+          } else {
             this.scrollLock = -1;
             return;
           }
-        }else{
+        } else {
           return;
         }
       }
@@ -254,7 +253,7 @@ class Slider extends React.Component {
     this.onSlideMouseDown({
       clientX: e.changedTouches[0].clientX,
       clientY: e.changedTouches[0].clientY,
-      touch : true,
+      touch: true,
     })
   }
 
@@ -263,7 +262,7 @@ class Slider extends React.Component {
       clientX: e.changedTouches[0].clientX,
       clientY: e.changedTouches[0].clientY,
       preventDefault: () => e.preventDefault(),
-      touch : true,
+      touch: true,
     })
   }
 
@@ -272,7 +271,7 @@ class Slider extends React.Component {
       clientX: e.changedTouches[0].clientX,
       clientY: e.changedTouches[0].clientY,
       preventDefault: () => e.preventDefault(),
-      touch : true,
+      touch: true,
     })
   }
 

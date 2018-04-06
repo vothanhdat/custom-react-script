@@ -2,7 +2,7 @@ import React from "react"
 import ReactDOM from "react-dom"
 import debounce from 'lodash/debounce'
 import wrapDisplayName from 'recompose/wrapDisplayName';
-import HighPerfomanceBoundingClientRect from '../utils/getsize'
+import HighPerfomanceBoundingClientRect from './utils/getsize'
 
 
 export default ({ thredsort = 20, deboundTime = 16 } = {}) => BaseComponent => class extends React.Component {

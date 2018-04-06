@@ -25,7 +25,7 @@ module.exports = ({
     rules: [
       {
         test: /\.(js|jsx|es6)$/,
-        exclude: /node_modules.*\.(js|jsx)$/,
+        exclude: /node_modules.*\.(js)$/,
         use: [
           {
             loader: 'babel-loader',
@@ -60,7 +60,7 @@ module.exports = ({
               minimize: !dev,
               sourceMap: dev,
               importLoaders: 1,
-              localIdentName: dev ? '[local]-[name]' : '[hash:base64:5]'
+              localIdentName: dev ? '[local]-[name]-[hash:base64:5]' : '[hash:base64:5]'
             },
           },
           {
@@ -85,7 +85,7 @@ module.exports = ({
     ]
   },
   resolve: {
-    extensions: ['*', '.js', '.jsx'],
+    extensions: ['*', '.js', '.jsx', '.es6'],
   },
   output: {
     path: resolveApp('./build'),

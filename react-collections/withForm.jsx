@@ -1,7 +1,7 @@
 
 import React, { Component } from 'react';
 import wrapDisplayName from 'recompose/wrapDisplayName';
-import Recapcha from '../components/Recapcha'
+import Recapcha from './Recapcha'
 import { isEqual } from 'lodash'
 
 

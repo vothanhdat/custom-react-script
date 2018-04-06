@@ -1,7 +1,6 @@
 import React from 'react'
-import withDelay from './withDelay'
 import withInviewPort from './withInviewPort';
-import utils from '../utils/utils'
+import utils from './utils/utils'
 
 
 
