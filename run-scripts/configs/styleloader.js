@@ -48,7 +48,7 @@ if(module.hot) {
 				value : function(callback){
 					callbackArray.push(callback);
 					return function(){
-						callbackArray = callbackArray.filter(e => e != callback);
+						callbackArray = callbackArray.filter(function(e){return e != callback});
 					}
 				}
 			},
@@ -84,7 +84,7 @@ if(module.hot) {
 			var clearOb = {};
 			for(var i in content.locals) clearOb[i] = undefined;
 			Object.assign(content.locals,clearOb,newContent.locals);
-			callbackArray.forEach(e => setTimeout(e,0));
+			callbackArray.forEach(function(e){setTimeout(e,0)});
 		}
 
 

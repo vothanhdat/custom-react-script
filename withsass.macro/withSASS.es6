@@ -36,21 +36,28 @@ const BaseClass = module.hot
   : React.Component
 
 
-export default (...styles) => BaseComponent => class extends BaseClass {
+export default (...styles) => BaseComponent => {
+  const WrappedComponent = class extends BaseClass {
 
-  static styles = styles
-  static preCombineStyles = combineClasses(...styles);
+    static styles = styles
+    static preCombineStyles = combineClasses(...styles);
 
-  static displayName = process.env.NODE_ENV !== 'production'
-    ? wrapDisplayName(BaseComponent, 'withSASS')
-    : ""
+    static displayName = process.env.NODE_ENV !== 'production'
+      ? wrapDisplayName(BaseComponent, 'withSASS')
+      : ""
 
-  render() {
-    const classes = this.props.classes
-      ? combineClasses(this.constructor.preCombineStyles, this.props.classes)
-      : this.constructor.preCombineStyles
-    return <BaseComponent {...this.props} classes={classes} />
+    render() {
+      const classes = this.props.classes
+        ? combineClasses(this.constructor.preCombineStyles, this.props.classes)
+        : this.constructor.preCombineStyles
+      return <BaseComponent {...this.props} classes={classes} />
+    }
   }
+  if (BaseComponent.prototype instanceof React.Component)
+    Object.assign(WrappedComponent, BaseComponent)
+
+
+  return WrappedComponent
 }
 
 

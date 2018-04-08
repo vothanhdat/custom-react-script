@@ -43,10 +43,13 @@ switch (script) {
 
     break;
   }
+  case 'devie':
   case 'start':
   default: {
     const middleware = require('webpack-dev-middleware');
-    const webpackConfig = require('../configs/webpack.config.dev')();
+    const webpackConfig = script == 'devie' 
+      ? require('../configs/webpack.config.dev.ie')()
+      : require('../configs/webpack.config.dev')();
     const compiler = webpack(webpackConfig);
 
     const express = require('express');
