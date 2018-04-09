@@ -1,0 +1,68 @@
+
+
+.previewitem{
+  composes : afterbg from './common.scss';
+  min-width: 150px;
+  min-height: 150px;
+  margin: 0.5em 0;
+  position: relative;
+
+  :global(.material-icons){
+    z-index: 20;
+    color: #333;
+    font-size: 2.5em;
+    text-shadow: 0px 0px 2px #fff,0px 0px 2px #fff;
+  }
+}
+
+.previewdelete{
+  position: absolute;
+  right: 5px;
+  top: 5px;
+}
+
+.uploadimage{
+  composes : afterIcon from './common.scss';
+  width: 150px !important;
+  height: 150px !important;
+  border: solid 1px #eee;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  img{
+    width: 100% !important;
+    height: 100% !important;
+    position: absolute;
+    left: 0;
+    top : 0;
+    object-fit: cover;
+  }
+}
+
+.previewitem {
+  &[data-drop],
+  &[data-replace="true"]{
+    .uploadimage:after{
+      font-size: 60px;
+      color: #666;
+      background: rgba(255,255,255,0.8);
+    }
+  }
+  &[data-replace="true"] .uploadimage:after{
+    content: "swap_horiz" !important;
+  }
+  &[data-drop] .uploadimage:after{
+    content: "add" !important;
+  }
+  &[data-drop][data-replace="true"] .uploadimage:after{
+    background-color: #eee;
+  }
+}
+
+.previewdrop{
+  composes : absolute from './common.scss';
+  top : 70%;
+  padding: 0.3em;
+  text-align: center;
+  font-size: 0.8em;
+}
