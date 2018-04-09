@@ -1,7 +1,7 @@
 import React from 'react'
 import { CircularProgress } from 'material-ui/Progress';
 import purple from 'material-ui/colors/purple';
-import FileField from './FileField.new'
+import FileField from './FileField'
 import { bind } from 'lodash-decorators/utils';
 
 function GetThumbnail(src) {
