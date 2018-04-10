@@ -3,6 +3,16 @@ import React from 'react'
 import { bind, memoize } from 'lodash-decorators'
 import { isEqual } from 'lodash'
 
+
+const isNativeProxy = (function () {
+  var o = new Proxy({}, {
+    get(target, key) {
+      return true;
+    }
+  })
+  return (o['111'] && o['222'] && o[Math.random()])
+})()
+
 export default function withHiPerfomanceForm(Component) {
 
   const SpecSym = Symbol('update')
@@ -58,6 +68,7 @@ export default function withHiPerfomanceForm(Component) {
     constructor(props) {
       super(props)
       this.state = getObserProps(props, props.obskeys)
+      this.Component = props.Com
     }
 
     @bind()
@@ -68,9 +79,14 @@ export default function withHiPerfomanceForm(Component) {
         this.setState(newOB)
     }
 
+    getCompnent() {
+      return this.props.pure ? this.Component : this.props.Com
+    }
+
     render() {
       const { obskeys, registerUpdate, Com, ...rest } = this.props
-      return <Com {...rest} {...this.state} />
+      const Component = this.getCompnent()
+      return <Component {...rest} {...this.state} />
     }
   }
 
@@ -94,16 +110,7 @@ export default function withHiPerfomanceForm(Component) {
       }
     }
 
-    values = new Proxy(
-      Object.assign(SpecFun(() => this.props.values), this.props.values),
-      { get: (target, key) => { return SpecFun(() => this.props.values[key]) } }
-    )
 
-
-    data = new Proxy(
-      Object.assign(SpecFun(() => this.props.data), this.props.data),
-      { get: (target, key) => { return SpecFun(() => (this.props.data || {})[key]) } }
-    )
 
     updateArray = []
 
@@ -116,16 +123,69 @@ export default function withHiPerfomanceForm(Component) {
     }
 
     componentDidUpdate(oldProps) {
-      console.time('depthCheck')
-      console.log(isEqual(oldProps.values, this.props.values))
-      console.timeEnd('depthCheck')
       console.time('updateArray')
       this.updateArray.forEach(e => e())
       console.timeEnd('updateArray')
+    }
 
+    updateId = Math.random()
+
+    _values = {}
+    values = isNativeProxy
+      ? new Proxy(
+        Object.assign(SpecFun(() => this.props.values), this.props.values),
+        {
+          get: (target, key) => {
+            return this._values[key]
+              || (this._values[key] = SpecFun(() => this.props.values[key]))
+          }
+        }
+      ) : Object.assign(SpecFun(() => this.props.values), this.props.values)
+
+    preceddValues() {
+      var update = false;
+      for (var i in this.props.values) {
+        if (!(i in this.values)) {
+          let key = i;
+          update || (update = true);
+          this.values[i] = SpecFun(() => this.props.values[key]);
+        }
+      }
+      if (update) this.updateId = Math.random()
+    }
+
+    _data = {}
+    data = isNativeProxy
+      ? new Proxy(
+        Object.assign(SpecFun(() => this.props.data), this.props.data),
+        {
+          get: (target, key) => {
+            return this._data[key]
+              || (this._data[key] = SpecFun(() => this.props.data[key]))
+          }
+        }
+      ) : Object.assign(SpecFun(() => this.props.data), this.props.data)
+
+    preceddDatas() {
+      var update = false;
+      for (var i in this.props.data) {
+        if (!(i in this.data)) {
+          let key = i;
+          update || (update = true);
+          this.data[i] = SpecFun(() => this.props.data[key])
+        }
+      }
+      if (update) this.updateId = Math.random()
     }
 
     render() {
+      if (!isNativeProxy) {
+        console.time('Preceed')
+        this.preceddValues();
+        this.preceddDatas();
+        console.timeEnd('Preceed')
+      }
+
       return <Context.Provider value={this.registerUpdate}>
         <Component
           {...this.props}
@@ -134,6 +194,7 @@ export default function withHiPerfomanceForm(Component) {
           data={this.data}
           Field={ChildRender}
           Obser={SpecFun}
+          updateId={this.updateId}
         />
       </Context.Provider>
     }
