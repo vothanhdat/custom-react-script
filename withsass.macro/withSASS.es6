@@ -54,9 +54,9 @@ export default (...styles) => BaseComponent => {
     }
   }
   if (BaseComponent.prototype instanceof React.Component)
-    Object.assign(WrappedComponent, BaseComponent)
+    Object.assign(WrappedComponent, BaseComponent, { styles, preCombineStyles: WrappedComponent.preCombineStyles })
 
-
+    
   return WrappedComponent
 }
 

@@ -2,12 +2,13 @@ const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-const ExtractTextPlugin = require("extract-text-webpack-plugin");
+// const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 
 const path = require('path')
@@ -54,15 +55,18 @@ module.exports = () => require('./webpack.config')({
         }),
         // new BundleAnalyzerPlugin(),
         new LodashModuleReplacementPlugin(),
-        new CleanWebpackPlugin([resolveApp('./build')],{root: process.cwd()}),
+        new CleanWebpackPlugin([resolveApp('./build')], { root: process.cwd() }),
         new CopyWebpackPlugin([
             { from: 'static/', to: '' },
             { from: 'static/index.html', to: '200.html' },
         ]),
 
-        new ExtractTextPlugin({
-            filename: "style.[name].[hash].css",
-            allChunks: true,
+        // new ExtractTextPlugin({
+        //     filename: "style.[name].[hash].css",
+        //     allChunks: true,
+        // }),
+        new MiniCssExtractPlugin({
+            filename: "[name].[hash].css",
         }),
         new PrerenderSPAPlugin({
             staticDir: resolveApp('./build'),
@@ -90,32 +94,29 @@ module.exports = () => require('./webpack.config')({
         new HtmlWebpackPlugin({
             filename: '200.html',
             template: 'static/index.html',
-            chunks: ['vendors~main','main']
+            chunks: ['vendors~main', 'main']
         }),
         new ProgressBarPlugin(),
     ],
-    cssExtra: ([cssloader, ...rest]) => ExtractTextPlugin.extract({
-        use: [
-            {
-                ...cssloader,
-                options:{
-                    ...cssloader.options,
-                    importLoaders : 2,
+    cssExtra: ([cssloader, ...rest]) => [
+        MiniCssExtractPlugin.loader,
+        {
+            ...cssloader,
+            options: {
+                ...cssloader.options,
+                importLoaders: 2,
+            }
+        },
+        {
+            loader: 'postcss-loader',
+            options: {
+                config: {
+                    path: __dirname + '/postcss.config.js'
                 }
-            },
-            { 
-                loader: 'postcss-loader',
-                options: {
-                   config :{
-                        path: __dirname + '/postcss.config.js'
-                   }
-                }
-            },
-            ...rest,
-        ],
-        fallback: 'style-loader',
-        // allChunks : true,
-    }),
+            }
+        },
+        ...rest,
+    ],
     babelPresets: [
         ["@babel/preset-env", {
             targets: {
