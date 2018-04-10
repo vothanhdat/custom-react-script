@@ -8,28 +8,35 @@ export default function withHiPerfomanceForm(Component) {
   const SpecSym = Symbol('update')
 
   const SpecFun = function (func) {
-    func.sym = SpecSym
+    func[SpecSym] = true
     return func
   }
 
   const Context = React.createContext({})
 
+  const getObserKeys = function (props) {
+    var keys = []
+    for (var i in props) {
+      var z = props[i];
+      if (z && z[SpecSym])
+        keys.push(i)
+    }
+    return keys;
+  }
+
+  const getObserProps = function (props, obserKeys) {
+    var ob = {}
+    for (var i in obserKeys) {
+      var e = obserKeys[i];
+      ob[e] = props[e]();
+    }
+    return ob;
+  }
+
   class ChildRender extends React.PureComponent {
 
-    getObserKeys() {
-      var keys = []
-      for (var i in this.props) {
-        var z = this.props[i];
-        if (z && z.sym == SpecSym)
-          keys.push(i)
-      }
-      return keys;
-    }
-
-
-
     render() {
-      const obserKeys = this.getObserKeys()
+      const obserKeys = getObserKeys(this.props)
       return <Context.Consumer>
         {(registerUpdate) => {
           return <ChildShalowUpdate {...this.props} registerUpdate={registerUpdate} obskeys={obserKeys} />
@@ -39,17 +46,6 @@ export default function withHiPerfomanceForm(Component) {
   }
 
   class ChildShalowUpdate extends React.Component {
-
-
-
-    getObserProps(obserKeys) {
-      var ob = {}
-      for (var i in obserKeys) {
-        var e = obserKeys[i];
-        ob[e] = this.props[e]();
-      }
-      return ob;
-    }
 
     componentDidMount() {
       this._sub = this.props.registerUpdate(this.onUpdate)
@@ -61,18 +57,15 @@ export default function withHiPerfomanceForm(Component) {
 
     constructor(props) {
       super(props)
-      this.state = this.getObserProps(props.obskeys)
+      this.state = getObserProps(props, props.obskeys)
     }
 
     @bind()
     onUpdate() {
-      var newOB = this.getObserProps(this.props.obskeys);
-
+      var newOB = getObserProps(this.props, this.props.obskeys);
       var state = this.state
-
       if (this.props.obskeys.some(e => newOB[e] != state[e]))
         this.setState(newOB)
-
     }
 
     render() {
@@ -102,13 +95,13 @@ export default function withHiPerfomanceForm(Component) {
     }
 
     values = new Proxy(
-      this.props.values,
+      Object.assign(SpecFun(() => this.props.values), this.props.values),
       { get: (target, key) => { return SpecFun(() => this.props.values[key]) } }
     )
 
 
     data = new Proxy(
-      this.props.data || {},
+      Object.assign(SpecFun(() => this.props.data), this.props.data),
       { get: (target, key) => { return SpecFun(() => (this.props.data || {})[key]) } }
     )
 
@@ -140,6 +133,7 @@ export default function withHiPerfomanceForm(Component) {
           values={this.values}
           data={this.data}
           Field={ChildRender}
+          Obser={SpecFun}
         />
       </Context.Provider>
     }
