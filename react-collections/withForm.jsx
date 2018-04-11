@@ -12,6 +12,15 @@ const withForm = (validate = {}, inputMasking = {}) => (BaseComponent) => {
 
     state = { ...this.props.data || {} }
 
+    getError(e) {
+      if (ReactIs.isElement(e))
+        return e;
+      else if (e instanceof Array)
+        return e.map(e => ReactIs.isElement(e) ? e : (e && new String(e)));
+      else
+        return new String(e);
+    }
+
     @bind()
     @memoize()
     handleChange(name) {
@@ -27,12 +36,8 @@ const withForm = (validate = {}, inputMasking = {}) => (BaseComponent) => {
             validate[name](value, newState, this.props);
         } catch (e) {
           error = true;
-          if (ReactIs.isElement(e))
-            helpText = e;
-          else if (e instanceof Array)
-            helpText = e.map(e => ReactIs.isElement(e) ? e : (e && new String(e)));
-          else
-            helpText = new String(e);
+          helpText = this.getError(e);
+
 
           if (!this.state[name + ':error'])
             this.setState({
@@ -73,7 +78,7 @@ const withForm = (validate = {}, inputMasking = {}) => (BaseComponent) => {
     handleError({ code, field, message } = {}) {
       this.setState({
         [field + ':error']: true,
-        [field + ':helptext']: message,
+        [field + ':helptext']: this.getError(message),
       });
       try {
         findDOMNode(this)
@@ -112,7 +117,7 @@ const withForm = (validate = {}, inputMasking = {}) => (BaseComponent) => {
       try {
         for (var i in validate)
           if (!i.includes(':') && validate[i])
-            validate[i](this.state, this.props)
+            validate[i](this.state[i], this.state, this.props)
       } catch (e) {
         this.handleError({
           field: i,
@@ -136,9 +141,18 @@ const withForm = (validate = {}, inputMasking = {}) => (BaseComponent) => {
       this.setState(newState)
     }
 
-    componentDidUpdate({data}){
-      if(!isEqual(this.props.data,data))
-        this.setState(this.props.data,() => this.validate())
+    @bind()
+    getCleanValues() {
+      var cleanState = {}
+      for (var i in this.state)
+        if (!i.includes(':'))
+          cleanState[i] = this.state[i];
+      return cleanState;
+    }
+
+    componentDidUpdate({ data }) {
+      if (!isEqual(this.props.data, data))
+        this.setState(this.props.data, () => this.validate())
     }
 
     render() {
@@ -151,6 +165,7 @@ const withForm = (validate = {}, inputMasking = {}) => (BaseComponent) => {
         validate={this.validate}
         handleError={this.handleError}
         handleToggle={this.handleToggle}
+        getCleanValues={this.getCleanValues}
       />
     }
 
