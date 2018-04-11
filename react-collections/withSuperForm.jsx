@@ -123,9 +123,9 @@ export default function withHiPerfomanceForm(Component) {
     }
 
     componentDidUpdate(oldProps) {
-      console.time('updateArray')
+      // console.time('updateArray')
       this.updateArray.forEach(e => e())
-      console.timeEnd('updateArray')
+      // console.timeEnd('updateArray')
     }
 
     updateId = Math.random()

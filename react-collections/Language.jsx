@@ -140,12 +140,16 @@ export class LanguageProvider extends React.Component {
     return false
   }
 
+  forceReload = () => this.forceUpdate();
+
   getChildContext() {
     LanguageProvider.translate = this.getLanguageTranslate
     return {
       language: {
         name: this.props.lang,
         _: this.getLanguageTranslate,
+        _id: (Lang[this.props.lang] || {})._id,
+        _forceUpdateLanguage: this.forceReload
       }
     };
   }
@@ -171,7 +175,7 @@ export const withTranslate = function (Component) {
 
 
 export function registerLang(key, LangEntries) {
-  var newLangEntries = {}
+  var newLangEntries = { _id: Math.random() }
 
   for (var i in LangEntries)
     newLangEntries[i] = new String(LangEntries[i])
