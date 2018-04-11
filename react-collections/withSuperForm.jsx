@@ -1,7 +1,7 @@
 
 import React from 'react'
 import { bind, memoize } from 'lodash-decorators'
-import { isEqual } from 'lodash'
+import { isEqual, memoize as Memorize } from 'lodash'
 
 
 const isNativeProxy = (function () {
@@ -97,19 +97,46 @@ export default function withHiPerfomanceForm(Component) {
       values: {},
     }
 
-    @bind()
-    @memoize()
-    formfield(fieldname) {
-      var { required, name, onChange, onBlur } = this.props.formfield(fieldname);
+    constructor(props) {
+      super(props);
 
-      return {
-        required, name, onChange, onBlur,
-        value: SpecFun(() => this.props.values[name] || ""),
-        error: SpecFun(() => this.props.values[`${name}:error`] || false),
-        helperText: SpecFun(() => this.props.values[`${name}:helptext`] || ""),
+      let { values = {}, data = {}, formfield } = props
+
+      this.updateProps = (newProps) => {
+        values = newProps.values || {};
+        data = newProps.data || {};
+        formfield = newProps.formfield;
       }
-    }
 
+      this.formfield = Memorize(
+        (fieldname) => {
+          var { required, name, onChange, onBlur } = formfield(fieldname);
+          return {
+            required, name, onChange, onBlur,
+            value: SpecFun(() => values[name] || ""),
+            error: SpecFun(() => values[`${name}:error`] || false),
+            helperText: SpecFun(() => values[`${name}:helptext`] || ""),
+          }
+        }
+      )
+
+      let _values = {}
+      this.values = isNativeProxy
+        ? new Proxy(
+          Object.assign(SpecFun(() => values), values),
+          { get: (_, key) => _values[key] || (_values[key] = SpecFun(() => values[key])) }
+        ) : Object.assign(SpecFun(() => values), values)
+
+
+      let _data = {}
+      this.data = isNativeProxy
+        ? new Proxy(
+          Object.assign(SpecFun(() => data), data),
+          { get: (_, key) => _data[key] || (_data[key] = SpecFun(() => data[key])) }
+        ) : Object.assign(SpecFun(() => data), data)
+
+
+    }
 
 
     updateArray = []
@@ -123,24 +150,14 @@ export default function withHiPerfomanceForm(Component) {
     }
 
     componentDidUpdate(oldProps) {
-      // console.time('updateArray')
-      this.updateArray.forEach(e => e())
-      // console.timeEnd('updateArray')
+      console.time('update')
+      this.updateProps(this.props);
+      this.updateArray.forEach(e => e());
+      console.timeEnd('update')
+      
     }
 
     updateId = Math.random()
-
-    _values = {}
-    values = isNativeProxy
-      ? new Proxy(
-        Object.assign(SpecFun(() => this.props.values), this.props.values),
-        {
-          get: (target, key) => {
-            return this._values[key]
-              || (this._values[key] = SpecFun(() => this.props.values[key]))
-          }
-        }
-      ) : Object.assign(SpecFun(() => this.props.values), this.props.values)
 
     preceddValues() {
       var update = false;
@@ -153,18 +170,6 @@ export default function withHiPerfomanceForm(Component) {
       }
       if (update) this.updateId = Math.random()
     }
-
-    _data = {}
-    data = isNativeProxy
-      ? new Proxy(
-        Object.assign(SpecFun(() => this.props.data), this.props.data),
-        {
-          get: (target, key) => {
-            return this._data[key]
-              || (this._data[key] = SpecFun(() => this.props.data[key]))
-          }
-        }
-      ) : Object.assign(SpecFun(() => this.props.data), this.props.data)
 
     preceddDatas() {
       var update = false;
