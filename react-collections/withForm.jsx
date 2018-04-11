@@ -4,6 +4,7 @@ import { findDOMNode } from 'react-dom';
 import wrapDisplayName from 'recompose/wrapDisplayName';
 import { isEqual } from 'lodash'
 import { debounce, bind, memoize } from 'lodash-decorators'
+import * as ReactIs from 'react-is'
 
 const withForm = (validate = {}, inputMasking = {}) => (BaseComponent) => {
 
@@ -26,8 +27,13 @@ const withForm = (validate = {}, inputMasking = {}) => (BaseComponent) => {
             validate[name](value, newState, this.props);
         } catch (e) {
           error = true;
-          helpText = new String(e);
-          console.log({ helpText })
+          if (ReactIs.isElement(e))
+            helpText = e;
+          else if (e instanceof Array)
+            helpText = e.map(e => ReactIs.isElement(e) ? e : (e && new String(e)));
+          else
+            helpText = new String(e);
+
           if (!this.state[name + ':error'])
             this.setState({
               [name + ':error']: true,
@@ -128,6 +134,11 @@ const withForm = (validate = {}, inputMasking = {}) => (BaseComponent) => {
       for (var i in this.state)
         newState[i] = null;
       this.setState(newState)
+    }
+
+    componentDidUpdate({data}){
+      if(!isEqual(this.props.data,data))
+        this.setState(this.props.data,() => this.validate())
     }
 
     render() {

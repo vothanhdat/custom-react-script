@@ -36,6 +36,7 @@
     left: 0;
     top : 0;
     object-fit: cover;
+    pointer-events: none;
   }
 }
 
@@ -59,10 +60,17 @@
   }
 }
 
-.previewdrop{
+.previewdrop,.error{
   composes : absolute from './common.scss';
   top : 70%;
   padding: 0.3em;
   text-align: center;
   font-size: 0.8em;
+  pointer-events: none;
+}
+
+.error{
+  top : 0%;
+  padding-top:70%;
+  background-color: rgba(255, 220, 220, 0.8);
 }

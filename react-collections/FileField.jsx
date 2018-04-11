@@ -31,6 +31,7 @@ class DropFileItem extends React.Component {
       ItemRender, e, i, name, classes, defaultValues, onRemove,
       dropping, files,
       dragProps = {},
+      error,
       ...props
     } = this.props
     return (
@@ -48,6 +49,9 @@ class DropFileItem extends React.Component {
         }
         {
           dropping && <span className={classes.previewdrop}> {e ? "Drop here to change image" : "Drop here to add images"}</span>
+        }
+        {
+          error && !dropping && <span className={classes.error}>{error}</span>
         }
       </ButtonBase>
     )
@@ -231,6 +235,7 @@ class FileField extends React.PureComponent {
               onRemove={this.onRemove}
               onDrop={this.onDropInFile(i)}
               onClick={this.onChangeItem}
+              error={error && helperText instanceof Array && helperText[i]}
             />
           )
         }
@@ -253,7 +258,7 @@ class FileField extends React.PureComponent {
         {buttons}
       </div>
 
-      {helperText && <FormHelperText >{helperText}</FormHelperText>}
+      {helperText && !(helperText instanceof Array) && <FormHelperText> {helperText} </FormHelperText>}
     </FormControl>
   }
 }
