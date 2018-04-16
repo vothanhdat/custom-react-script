@@ -66,14 +66,14 @@ module.exports = () => require('./webpack.config')({
         //     allChunks: true,
         // }),
         new MiniCssExtractPlugin({
-            filename: "[name].[hash].css",
+            filename: "style.[name].[hash].css",
         }),
         new PrerenderSPAPlugin({
             staticDir: resolveApp('./build'),
             routes: [
                 ...prerenderPaths,
-                ...prerenderPaths.map(e => '/kr' + e),
-                ...prerenderPaths.map(e => '/cn' + e),
+                ...prerenderPaths.map(e => '/ko' + e),
+                ...prerenderPaths.map(e => '/zh' + e),
             ],
             renderer: new Renderer({
                 injectProperty: '__PRERENDER_SPA',

@@ -1,5 +1,6 @@
 
 import React from 'react'
+import * as PropTypes from 'prop-types'
 import { bind, memoize } from 'lodash-decorators'
 import { isEqual, memoize as Memorize } from 'lodash'
 
@@ -44,20 +45,20 @@ export default function withHiPerfomanceForm(Component) {
   }
 
   class ChildRender extends React.PureComponent {
-
+    static contextTypes = {
+      registerUpdate: PropTypes.func,
+    }
     render() {
       const obserKeys = getObserKeys(this.props)
-      return <Context.Consumer>
-        {(registerUpdate) => {
-          return <ChildShalowUpdate {...this.props} registerUpdate={registerUpdate} obskeys={obserKeys} />
-        }}
-      </Context.Consumer>
+      return <ChildShalowUpdate {...this.props} registerUpdate={this.context.registerUpdate} obskeys={obserKeys} />
     }
   }
 
   class ChildShalowUpdate extends React.Component {
 
     componentDidMount() {
+      if (this.props.subs)
+        this.onUpdate.subs = this.props.subs.split(' ')
       this._sub = this.props.registerUpdate(this.onUpdate)
     }
 
@@ -96,6 +97,17 @@ export default function withHiPerfomanceForm(Component) {
       data: {},
       values: {},
     }
+
+    static childContextTypes = {
+      registerUpdate: PropTypes.func,
+    }
+
+    getChildContext() {
+      return {
+        registerUpdate: this.registerUpdate
+      };
+    }
+
 
     constructor(props) {
       super(props);
@@ -140,21 +152,41 @@ export default function withHiPerfomanceForm(Component) {
 
 
     updateArray = []
+    subcribleObs = {}
 
     registerUpdate = (e) => {
-      this.updateArray.push(e)
-      return () => {
-        var idx = this.updateArray.findIndex(e)
-        this.updateArray.splice(e, 1)
+      if (e.subs) {
+        e.subs.forEach(f => (this.subcribleObs[f] || (this.subcribleObs[f] = [])).push(e));
+        return () => {
+          e.subs.forEach(f => this.subcribleObs[f] = this.subcribleObs[f].filter(z => z != e));
+        }
+      } else {
+        this.updateArray.push(e)
+        return () => {
+          var idx = this.updateArray.findIndex(e)
+          this.updateArray.splice(e, 1)
+        }
       }
+
     }
 
     componentDidUpdate(oldProps) {
-      console.time('update')
       this.updateProps(this.props);
+
+      const { data: oldData = {}, values: oldValues } = oldProps
+      const { data, values } = this.props
+      const updateSet = new Set()
+
+      for (var i in this.subcribleObs) {
+        if (values[i] != oldValues[i] || (data && data[i] != oldData[i])) {
+          this.subcribleObs[i].forEach(e => updateSet.add(e));
+        }
+      }
+
+      updateSet.forEach(e => e());
+
       this.updateArray.forEach(e => e());
-      console.timeEnd('update')
-      
+
     }
 
     updateId = Math.random()
@@ -191,17 +223,15 @@ export default function withHiPerfomanceForm(Component) {
         console.timeEnd('Preceed')
       }
 
-      return <Context.Provider value={this.registerUpdate}>
-        <Component
-          {...this.props}
-          formfield={this.formfield}
-          values={this.values}
-          data={this.data}
-          Field={ChildRender}
-          Obser={SpecFun}
-          updateId={this.updateId}
-        />
-      </Context.Provider>
+      return <Component
+        {...this.props}
+        formfield={this.formfield}
+        values={this.values}
+        data={this.data}
+        Field={ChildRender}
+        Obser={SpecFun}
+        updateId={this.updateId}
+      />
     }
   }
 
