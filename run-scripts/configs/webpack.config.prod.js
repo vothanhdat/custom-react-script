@@ -18,8 +18,16 @@ const fs = require('fs')
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
+let configData = {}
 
-const prerenderPaths = ['/', '/termsofuse/', '/privacypolicy/', '/blog/']
+try {
+    configData = require(resolveApp('./config.js'));
+} catch (error) { }
+
+const {
+    prerenderPaths = ['/'],
+} = configData;
+
 
 // const WorkboxPlugin = require('workbox-webpack-plugin');
 
@@ -70,11 +78,7 @@ module.exports = () => require('./webpack.config')({
         }),
         new PrerenderSPAPlugin({
             staticDir: resolveApp('./build'),
-            routes: [
-                ...prerenderPaths,
-                ...prerenderPaths.map(e => '/ko' + e),
-                ...prerenderPaths.map(e => '/zh' + e),
-            ],
+            routes: prerenderPaths,
             renderer: new Renderer({
                 injectProperty: '__PRERENDER_SPA',
                 inject: {},
