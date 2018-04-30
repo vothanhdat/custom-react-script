@@ -1,7 +1,7 @@
 {
   "name": "react-collections",
   "description": "Read file contents at build time, similar to webpack raw-loader",
-  "version": "0.0.7",
+  "version": "0.0.8",
   "license": "MIT",
   "files": [
     "*",

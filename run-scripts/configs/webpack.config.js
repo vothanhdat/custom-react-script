@@ -31,10 +31,10 @@ module.exports = ({
             loader: 'babel-loader',
             options: {
               plugins: [
-                "transform-decorators",
-                "transform-class-properties",
-                "syntax-jsx",
-                "transform-react-jsx",
+                ["@babel/plugin-proposal-decorators",{legacy:true}],
+                "@babel/plugin-proposal-class-properties",
+                "@babel/plugin-syntax-jsx",
+                "@babel/plugin-transform-react-jsx",
                 "macros",
                 "@babel/plugin-syntax-dynamic-import",
                 ...babel_plugins
