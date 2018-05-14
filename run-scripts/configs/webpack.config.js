@@ -32,7 +32,7 @@ module.exports = ({
             options: {
               plugins: [
                 ["@babel/plugin-proposal-decorators",{legacy:true}],
-                "@babel/plugin-proposal-class-properties",
+                ["@babel/plugin-proposal-class-properties",{legacy:true}],
                 "@babel/plugin-syntax-jsx",
                 "@babel/plugin-transform-react-jsx",
                 "macros",
@@ -86,6 +86,9 @@ module.exports = ({
   },
   resolve: {
     extensions: ['*', '.js', '.jsx', '.es6'],
+    alias: {
+      "@": path.resolve(__dirname, 'src/'),
+    }
   },
   output: {
     path: resolveApp('./build'),

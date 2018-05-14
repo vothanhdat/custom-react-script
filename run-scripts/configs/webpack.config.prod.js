@@ -1,6 +1,5 @@
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 const CopyWebpackPlugin = require('copy-webpack-plugin')
 // const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -62,7 +61,6 @@ module.exports = () => require('./webpack.config')({
             sourceMap: false,
         }),
         // new BundleAnalyzerPlugin(),
-        new LodashModuleReplacementPlugin(),
         new CleanWebpackPlugin([resolveApp('./build')], { root: process.cwd() }),
         new CopyWebpackPlugin([
             { from: 'static/', to: '' },
