@@ -2,6 +2,18 @@ const webpack = require('webpack');
 const path = require('path')
 const fs = require('fs')
 
+let configData = {}
+
+try {
+  const appDirectory = fs.realpathSync(process.cwd());
+  const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
+  configData = require(resolveApp('./config.js'));
+} catch (error) { }
+
+const {
+  devPath = "http://localhost:8080/",
+} = configData;
+
 module.exports = (env,
   argv,
   {
@@ -41,7 +53,7 @@ module.exports = (env,
     ],
     output: {
       path: '/build',
-      publicPath: 'http://localhost:8080/',
+      publicPath: devPath,
       filename: '[name].js',
     },
   },
