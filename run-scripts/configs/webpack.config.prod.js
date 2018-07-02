@@ -1,7 +1,7 @@
+//@ts-check
 const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const CopyWebpackPlugin = require('copy-webpack-plugin')
-// const ExtractTextPlugin = require("extract-text-webpack-plugin");
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const PrerenderSPAPlugin = require('prerender-spa-plugin')
@@ -17,15 +17,10 @@ const fs = require('fs')
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
-let configData = {}
-
-try {
-    configData = require(resolveApp('./config.js'));
-} catch (error) { }
 
 const {
     prerenderPaths = ['/'],
-} = configData;
+} = require('./projectconfig');
 
 
 // const WorkboxPlugin = require('workbox-webpack-plugin');

@@ -1,3 +1,4 @@
+//@ts-check
 const webpack = require('webpack');
 const fs = require('fs');
 const path = require('path')
@@ -7,13 +8,9 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
-try {
-  configData = require(resolveApp('./config.js'));
-} catch (error) { }
-
 const {
   alias = {},
-} = configData;
+} = require('./projectconfig');
 
 
 module.exports = ({

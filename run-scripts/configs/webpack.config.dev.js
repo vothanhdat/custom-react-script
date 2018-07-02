@@ -1,25 +1,17 @@
+//@ts-check
 const webpack = require('webpack');
 const path = require('path')
-const fs = require('fs')
-
-let configData = {}
-
-try {
-  const appDirectory = fs.realpathSync(process.cwd());
-  const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
-  configData = require(resolveApp('./config.js'));
-} catch (error) { }
 
 const {
   devPath = "http://localhost:8080/",
-} = configData;
+} = require('./projectconfig');
 
 module.exports = (env,
   argv,
   {
     babel_plugins = [],
     cssLoaders = [],
-    babelPresets
+    babelPresets = {},
   } = {}
 ) => require('./webpack.config')({
   dev: true,
@@ -34,9 +26,6 @@ module.exports = (env,
     new webpack.NoEmitOnErrorsPlugin(),
   ],
   override: {
-    output: {
-      devtoolModuleFilenameTemplate: 'webpack:///[resource-path]'
-    },
     devtool: "eval-source-map",
     devServer: {
       contentBase: 'static',
@@ -55,6 +44,7 @@ module.exports = (env,
       path: '/build',
       publicPath: devPath,
       filename: '[name].js',
+      // devtoolModuleFilenameTemplate: 'webpack:///[resource-path]'
     },
   },
   cssExtra: ([cssLoader, ...rest]) => [
