@@ -19,7 +19,7 @@ module.exports = ({
   plugins = [],
   override = {},
   cssExtra = e => e,
-  babelPresets
+  babelPresets,
 }) => ({
   mode: dev ? 'development' : 'production',
   entry: [
@@ -45,7 +45,7 @@ module.exports = ({
               ],
               presets: babelPresets || [
                 ["@babel/preset-env", {
-                  targets: { node: "9.5" },
+                  targets: { node: "10.0" },
                   shippedProposals: true
                 }]
               ]

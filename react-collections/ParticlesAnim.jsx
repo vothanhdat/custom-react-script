@@ -11,25 +11,38 @@ const
 
 class Particle {
 
-  get opacity(){
-    return this.opts.opacity || opacity 
+  get opacity() {
+    return this.opts.opacity || opacity
   }
-  get color(){
-    return this.opts.color || color 
+  get color() {
+    return this.opts.color || color
   }
-  get radius(){
-    return this.opts.radius || radius 
+  get radius() {
+    return this.opts.radius || radius
   }
-  get offset(){
-    return this.opts.offset || offset 
+  get offset() {
+    return this.opts.offset || offset
   }
+
+
+  velocity = {
+    _this: this,
+    _rx = Math.random() - 0.5,
+    _ry = Math.random() - 0.5,
+    get x() {
+      return this._rx * (this._this.opts || velocity).x
+    },
+    get y() {
+      return this._ry * (this._this.opts || velocity).y
+    },
+  }
+
   constructor(canvas, opts, ctx) {
     Object.assign(this,
       { canvas, opts, ctx },
       {
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        velocity: { x: (Math.random() - 0.5) * velocity.x, y: (Math.random() - 0.5) * velocity.y },
       }
     )
   }
@@ -61,20 +74,20 @@ class Particle {
 }
 
 class ParticleNetwork {
-  get opacity(){
-    return this.opts.opacity || opacity 
+  get opacity() {
+    return this.opts.opacity || opacity
   }
-  get color(){
-    return this.opts.color || color 
+  get color() {
+    return this.opts.color || color
   }
-  get radius(){
-    return this.opts.radius || radius 
+  get radius() {
+    return this.opts.radius || radius
   }
-  get offset(){
-    return this.opts.offset || offset 
+  get offset() {
+    return this.opts.offset || offset
   }
-  get maxdistance(){
-    return this.opts.maxdistance || maxdistance 
+  get maxdistance() {
+    return this.opts.maxdistance || maxdistance
   }
   constructor(canvas, opts) {
     Object.assign(this,
@@ -86,21 +99,21 @@ class ParticleNetwork {
     )
   }
 
-  set max_particles(value){
-    if(isFinite(value)){
+  set max_particles(value) {
+    if (isFinite(value)) {
       var delta = value - this.opts.max_particles
-  
-      if(delta > 0){
+
+      if (delta > 0) {
         for (let i = 0; i < delta; i++)
           this.particles.push(new Particle(this.canvas, this.opts, this.ctx))
-      }else if(delta < 0){
-        this.particles.splice(0,-delta)
+      } else if (delta < 0) {
+        this.particles.splice(0, -delta)
       }
       this.opts.max_particles = value
     }
   }
-  get max_particles(){
-    return this.opts.max_particles || max_particles 
+  get max_particles() {
+    return this.opts.max_particles || max_particles
   }
 
   init() {
@@ -168,15 +181,15 @@ class NetParticle {
 
     }
 
-    window.addEventListener('resize',this._resize = resize, false)
-    canvas.addEventListener('mousemove',this._mousemove = this.mousemove, false)
+    window.addEventListener('resize', this._resize = resize, false)
+    canvas.addEventListener('mousemove', this._mousemove = this.mousemove, false)
     resize()
     this.count = 0;
   }
 
-  unmount(){
-    window.removeEventListener('resize',this._resize)
-    this.canvas.removeEventListener('mousemove',this._mousemove, false)
+  unmount() {
+    window.removeEventListener('resize', this._resize)
+    this.canvas.removeEventListener('mousemove', this._mousemove, false)
   }
 
   mousemove = (e) => {

@@ -11,7 +11,7 @@ module.exports = (env,
   {
     babel_plugins = [],
     cssLoaders = [],
-    babelPresets = {},
+    babelPresets,
   } = {}
 ) => require('./webpack.config')({
   dev: true,
