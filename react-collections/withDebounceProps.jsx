@@ -3,38 +3,39 @@ import wrapDisplayName from 'recompose/wrapDisplayName';
 import Debounce from 'lodash-decorators/debounce'
 import isEqual from 'lodash/isEqual'
 
-export default (delay) => BaseComponent => class extends React.Component {
+export default (delay, filter = e => e) => BaseComponent => class extends React.Component {
 
-    static displayName = process.env.NODE_ENV !== 'production' 
-        ? wrapDisplayName(BaseComponent, 'withDelay') 
+    static displayName = process.env.NODE_ENV !== 'production'
+        ? wrapDisplayName(BaseComponent, 'withDelay')
         : ""
 
-    state = { ...this.props }
+    state = filter(this.props)
 
     componentDidMount() {
-       this.updateProps();
+        this.updateProps();
     }
 
-    componentWillUnmount(){
+    componentWillUnmount() {
         this.updateProps.cancel();
     }
 
     @Debounce(delay)
-    updateProps(){
-        this.setState({...this.props})
+    updateProps() {
+        this.setState(filter(this.props))
     }
 
-    shouldComponentUpdate(props,state){
-        if(!isEqual(state,this.state))
+    shouldComponentUpdate(props, state) {
+        if (!isEqual(state, this.state))
             return true;
-        if(!isEqual(props,this.props)){}
+        if (!isEqual(filter(props), filter(this.props))) {
             this.updateProps();
+        }
         return false
     }
 
 
     render() {
-        return  <BaseComponent {...this.state}/>
+        return <BaseComponent {...this.props} {...this.state} />
     }
 }
 
