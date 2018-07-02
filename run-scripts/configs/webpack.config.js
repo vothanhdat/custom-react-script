@@ -7,6 +7,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
+try {
+  configData = require(resolveApp('./config.js'));
+} catch (error) { }
+
+const {
+  alias = {},
+} = configData;
 
 
 module.exports = ({
@@ -32,7 +39,7 @@ module.exports = ({
             options: {
               plugins: [
                 ["@babel/plugin-proposal-decorators",{legacy:true}],
-                ["@babel/plugin-proposal-class-properties",{legacy:true}],
+                ["@babel/plugin-proposal-class-properties",{loose:true}],
                 "@babel/plugin-syntax-jsx",
                 "@babel/plugin-transform-react-jsx",
                 "macros",
@@ -86,9 +93,7 @@ module.exports = ({
   },
   resolve: {
     extensions: ['*', '.js', '.jsx', '.es6'],
-    alias: {
-      "@": path.resolve(__dirname, 'src/'),
-    }
+    alias,
   },
   output: {
     path: resolveApp('./build'),
