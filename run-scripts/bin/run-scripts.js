@@ -12,6 +12,9 @@ const path = require('path');
 const appDirectory = fs.realpathSync(process.cwd());
 const resolveApp = relativePath => path.resolve(appDirectory, relativePath);
 
+const {
+  port = 8080,
+} = require('../configs/projectconfig');
 
 
 const args = process.argv.slice(2);
@@ -62,7 +65,7 @@ switch (script) {
     }));
     app.use(require("webpack-hot-middleware")(compiler));
     app.use(express.static(resolveApp('static')));
-    app.listen(8080, () => console.log('Example app listening on port 8080!'))
+    app.listen(port, () => console.log(`Example app listening on port ${port}!`))
     break;
   }
 }
