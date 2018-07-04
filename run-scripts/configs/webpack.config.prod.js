@@ -8,6 +8,7 @@ const PrerenderSPAPlugin = require('prerender-spa-plugin')
 const Renderer = PrerenderSPAPlugin.PuppeteerRenderer
 const ProgressBarPlugin = require('progress-bar-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const ImageminPlugin = require('imagemin-webpack-plugin').default
 
 
 const path = require('path')
@@ -61,11 +62,7 @@ module.exports = () => require('./webpack.config')({
             { from: 'static/', to: '' },
             { from: 'static/index.html', to: '200.html' },
         ]),
-
-        // new ExtractTextPlugin({
-        //     filename: "style.[name].[hash].css",
-        //     allChunks: true,
-        // }),
+        new ImageminPlugin({ test: /\.(jpe?g|png|gif|svg)$/i }),
         new MiniCssExtractPlugin({
             filename: "style.[name].[hash].css",
         }),
