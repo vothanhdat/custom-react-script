@@ -32,7 +32,7 @@ switch (script) {
 
     compiler.run(function (err, stats) {
       if (err)
-        console.err(err)
+        console.error(err)
       else{
         console.log(stats.toString({
           chunks: false, // Makes the build much quieter
