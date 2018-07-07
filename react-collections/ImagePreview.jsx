@@ -1,8 +1,7 @@
-import React from 'react'
-import { CircularProgress } from 'material-ui/Progress';
-import purple from 'material-ui/colors/purple';
-import FileField from './FileField'
-import { bind } from 'lodash-decorators/utils';
+import { CircularProgress } from '@material-ui/core';
+import { purple } from '@material-ui/core/colors';
+import React from 'react';
+import FileField from './FileField';
 
 function GetThumbnail(src) {
 
@@ -111,7 +110,7 @@ class ImagePreview extends React.Component {
         alignItems: "center"
       }}>
         {(this.src && !this.loading)
-          ? <img src={this.src}  style={style} />
+          ? <img src={this.src} style={style} />
           : <CircularProgress
             style={{ color: purple[500] }} thickness={7}
             {...loadingProps} />}
@@ -126,7 +125,7 @@ class ImagePreview extends React.Component {
     }}>
       <img src={value || '/images/16-9.png'} style={style} />
     </span>
-    
+
 
   }
 }

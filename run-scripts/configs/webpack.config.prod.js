@@ -56,7 +56,6 @@ module.exports = () => require('./webpack.config')({
         new UglifyJsPlugin({
             sourceMap: false,
         }),
-        // new BundleAnalyzerPlugin(),
         new CleanWebpackPlugin([resolveApp('./build')], { root: process.cwd() }),
         new CopyWebpackPlugin([
             { from: 'static/', to: '' },
@@ -91,6 +90,8 @@ module.exports = () => require('./webpack.config')({
             chunks: ['vendors~main', 'main']
         }),
         new ProgressBarPlugin(),
+        new BundleAnalyzerPlugin(),
+
     ],
     cssExtra: ([cssloader, ...rest]) => [
         MiniCssExtractPlugin.loader,

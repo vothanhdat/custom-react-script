@@ -1,7 +1,7 @@
 
 import React from 'react';
-import { FormLabel, FormControl, FormControlLabel, FormHelperText } from 'material-ui/Form';
-import Checkbox from 'material-ui/Checkbox';
+import { FormLabel, FormControl, FormControlLabel, FormHelperText } from '@material-ui/core';
+import Checkbox from '@material-ui/core/Checkbox';
 
 
 

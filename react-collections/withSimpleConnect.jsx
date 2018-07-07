@@ -3,7 +3,6 @@ import isEqual from 'lodash/isEqual'
 
 
 
-
 export default getState => Component => class AppContainer extends React.Component {
 
   static displayName = `withConnect(${Component.name || Component.displayName})`

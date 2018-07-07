@@ -1,11 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom'
-import { FormLabel, FormControl, FormControlLabel, FormHelperText } from 'material-ui/Form';
-import Button from 'material-ui/Button';
-import { withStyles } from 'material-ui/styles';
+import { withStyles } from '@material-ui/core';
 import { bind, memoize } from 'lodash-decorators';
-import { ButtonBase, IconButton } from 'material-ui';
-import { noop } from 'redux-saga/utils';
+import { Button, ButtonBase, IconButton, FormLabel, FormControl, FormControlLabel, FormHelperText } from '@material-ui/core';
 import withSCSS from 'withsass.macro';
 import withDrop from './withDrop'
 
