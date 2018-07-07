@@ -9,11 +9,11 @@ export default (delay, filter = e => e) => BaseComponent => class extends React.
         ? wrapDisplayName(BaseComponent, 'withDelay')
         : ""
 
-    state = filter(this.props)
+    state = { data: filter(this.props) }
 
-    componentDidMount() {
-        this.updateProps();
-    }
+    // componentDidMount() {
+    //     this.updateProps();
+    // }
 
     componentWillUnmount() {
         this.updateProps.cancel();
@@ -21,21 +21,17 @@ export default (delay, filter = e => e) => BaseComponent => class extends React.
 
     @Debounce(delay)
     updateProps() {
-        this.setState(filter(this.props))
+        this.setState({ data: filter(this.props) })
     }
 
-    shouldComponentUpdate(props, state) {
-        if (!isEqual(state, this.state))
-            return true;
-        if (!isEqual(filter(props), filter(this.props))) {
+    componentDidUpdate(newProps) {
+        if (!isEqual(filter(newProps), filter(this.props))) {
             this.updateProps();
         }
-        return false
     }
 
-
     render() {
-        return <BaseComponent {...this.props} {...this.state} />
+        return <BaseComponent {...this.props} {...this.state.data} />
     }
 }
 
